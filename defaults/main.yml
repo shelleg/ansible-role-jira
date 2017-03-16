@@ -1,0 +1,52 @@
+---
+# defaults file for ansible-role-jira
+
+## https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-7.3.3.tar.gz
+
+jira_major_version: 7
+jira_minor_version: 3
+jira_patch_version: 3
+
+jira_version: "{{ jira_major_version }}.{{ jira_minor_version }}.{{ jira_patch_version }}"
+jira_archive: "atlassian-jira-software-{{ jira_version }}.tar.gz"
+
+jira_base_url: "https://downloads.atlassian.com/software/jira/downloads/"
+jira_download_url: "{{ jira_base_url }}{{ jira_archive }}"
+
+jira_user: jira
+jira_group: jira
+
+
+jira_work_dir: /opt/atlassian
+jira_install_dir: /opt/atlassian/jira
+jira_home_dir: /var/atlassian/jira-data
+
+jira_home: "/var/lib/jira"
+jira_catalina_home: "/usr/share/jira"
+
+jira_templates:
+  -   src: "jira.j2"
+      dest: "/etc/init.d/jira"
+      owner: "root"
+      group: "root"
+      mode: "0755"
+  -   src: "setenv.sh.j2"
+      dest: "{{ jira_catalina_home }}/bin/setenv.sh"
+      owner: "{{ jira_user }}"
+      group: "{{ jira_user }}"
+      mode: "0644"
+  -   src: "server.xml.j2"
+      dest: "{{ jira_catalina_home }}/conf/server.xml"
+      owner: "{{ jira_user }}"
+      group: "{{ jira_user }}"
+      mode: "0644"
+
+jira_connector_port: "8080"
+jira_server_port: "8005"
+
+jira_context: ''
+
+jira_maximum_memory: "1024m"
+jira_minimum_memory: "512m"
+jira_jvm_args: "-Datlassian.plugins.enable.wait=300"
+
